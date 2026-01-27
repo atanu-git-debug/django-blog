@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'follow_us',
     'crispy_forms',
     'crispy_bootstrap4',
+    'dashboard',
 ]
 
 MIDDLEWARE = [

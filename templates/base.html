@@ -29,7 +29,7 @@
           </div>
           {% if user.is_authenticated %}
           <div class="col-4 d-flex justify-content-end align-items-center">
-            <span>You are logged in as {{ user }}</span> &nbsp;
+            <span><a href="{% url 'dashboard' %}">Dashboard</a></span> &nbsp;
             <a class="btn btn-sm btn-warning" href="{% url 'logout' %}">Logout</a>
           </div>
           {% else %}
