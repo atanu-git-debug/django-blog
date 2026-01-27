@@ -1,9 +1,12 @@
 
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from blogs.models import Category,Blog
 from about.models import About
 from follow_us.models import FollowUs
+from .forms import RegistrationForm
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib import auth
 
 def home(request):
     
@@ -22,3 +25,42 @@ def home(request):
         'about_us': about_us,
     }
     return render(request, 'home.html',context)
+
+
+def register(request):
+    form = RegistrationForm()
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('register')
+    else:
+        form = RegistrationForm()
+    context = {
+        'form': form
+    }
+    return render(request,'register.html',context)
+
+
+def login(request):
+
+    if request.method == 'POST':
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            #log the user in
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+
+            user = auth.authenticate(username=username,password=password)
+            if user is not None:
+                auth.login(request,user)
+            return redirect('home')
+    form = AuthenticationForm()
+    context={
+        'form':form
+    }
+    return render(request,'login.html',context)
+
+def logout(request):
+    auth.logout(request)
+    return redirect('home')

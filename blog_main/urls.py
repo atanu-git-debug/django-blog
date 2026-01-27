@@ -24,7 +24,15 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.home,name='home'),
     path('category/',include('blogs.urls')),
-    path('<slug:slug>/',blog_views.blogs,name='blogs'),
+    path('blogs/<slug:slug>/',blog_views.blogs,name='blogs'),
     #seacrh endpoint
     path('blogs/search/',blog_views.search,name='search'),
+    #registration
+    path('register/',views.register,name='register'),
+
+    #login path
+    path('login/',views.login,name='login'),
+
+    #logout path
+    path('logout/',views.logout,name='logout'),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
