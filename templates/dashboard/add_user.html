@@ -4,7 +4,7 @@
 <div class="row">
     <!--load the sidebar-->
     {% include 'dashboard/sidebar.html' %}
-    
+    {% if perms.auth.add_user %}
     <div class="col-md-9">
         <h3>Add New User</h3>
         
@@ -14,7 +14,10 @@
             <button type="submit" class="btn btn-warning">Add User</button>
         </form>
         <br>
+        {% else %}
         
+        <h5 class="text-danger">You do not have permission to add users.</h5>
+        {% endif %}
     </div>
  </div>
 {% endblock %}

@@ -1,9 +1,10 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from blogs.models import Blog, Category
 from django.contrib.auth.decorators import login_required
-from .forms import BlogPostForm, CategoryForm, UserForm
+from .forms import BlogPostForm, CategoryForm, UserForm,EditUserForm
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
+
 # Create your views here.
 
 
@@ -139,11 +140,11 @@ def add_user(request):
 def edit_user(request,id):
     user = get_object_or_404(User,id=id)
     if request.method == 'POST':
-        form = UserForm(request.POST,instance=user)
+        form = EditUserForm(request.POST,instance=user)
         if form.is_valid():
             form.save()
             return redirect('users')
-    form = UserForm(instance=user)
+    form = EditUserForm(instance=user)
     context = {
         'form':form,
         'user':user

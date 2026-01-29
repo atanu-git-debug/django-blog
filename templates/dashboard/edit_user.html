@@ -5,7 +5,7 @@
 <div class="row">
     <!--load the sidebar-->
     {% include 'dashboard/sidebar.html' %}
-    
+    {% if perms.auth.change_user %}
     <div class="col-md-9">
         <h3>Edit User</h3>
 
@@ -15,7 +15,9 @@
             <button type="submit" class="btn btn-warning">Update User</button>
         </form>
         <br>
-        
+        {% else %}
+        <h5 class="text-danger">You do not have permission to edit users.</h5>
+        {% endif %}
     </div>
  </div>
 {% endblock %}

@@ -2,6 +2,7 @@
 
 from blogs.models import Blog, Category
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 class CategoryForm(forms.ModelForm):
 
@@ -15,7 +16,12 @@ class BlogPostForm(forms.ModelForm):
         fields = ('title','category','featured_image','short_description','blog_body','status','is_featured')
 
 
-class UserForm(forms.ModelForm):
+class UserForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ('username','first_name','last_name','email')
+        fields = ('username','first_name','last_name','email','is_active','is_staff','is_superuser','groups','user_permissions')
+
+class EditUserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('username','first_name','last_name','email','is_active','is_staff','is_superuser','groups','user_permissions')
