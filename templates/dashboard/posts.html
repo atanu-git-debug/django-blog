@@ -7,7 +7,11 @@
     <!--right sidebar-->
     <div class="col-md-9">
         <h3>All posts</h3>
+        {% if perms.blogs.add_blog %}
         <a href="{% url 'add_post' %}" class="btn btn-dark text-light float-right mb-2">Add New Post</a>
+
+        
+        {% endif %}
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -15,9 +19,11 @@
                     <th >Post Title</th>
                     <th >Category</th>
                     <th >Author</th>
+                    {% if perms.blogs.change_blog %}
                     <th >Status</th>
                     <th>Featured</th>
                     <th>Action</th>
+                    {% endif %}
                 </tr>
             </thead>
             <tbody>
@@ -27,8 +33,10 @@
                     <td>{{ post.title }}</td>
                     <td>{{ post.category }}</td>
                     <td>{{ post.author }}</td>
+                    {% if perms.blogs.change_blog %}
                     <td>{{ post.status }}</td>
                     <td>{% if post.is_featured %}<i class="fas fa-check">Yes</i>{% else %}<i class="fas fa-times">No</i>{% endif %}</td>
+                    
                     <td>
                        <div class="btn-group" role="group" aria-label="Basic example">
                             <a href="{% url 'edit_post' post.id %}" class="btn btn-sm btn-success"><i class="fas fa-edit"></i> Edit</a>
@@ -36,6 +44,7 @@
                             <a href="{% url 'delete_post' post.id %}" class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i> Delete</a>
                         </div>
                     </td>
+                    {% endif %}
                     
                 </tr>
                 {% endfor %}

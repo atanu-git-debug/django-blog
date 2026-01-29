@@ -1,9 +1,13 @@
 from django.shortcuts import get_object_or_404, redirect, render
+from django.http import HttpResponse
+from blog_main.views import logout
 from blogs.models import Blog, Category
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 from .forms import BlogPostForm, CategoryForm, UserForm,EditUserForm
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
+from django.contrib import auth
 
 # Create your views here.
 
@@ -25,7 +29,8 @@ def categories(request):
     return render(request,'dashboard/categories.html')
 
 def add_category(request):
-
+    if not (request.user.is_staff or request.user.has_perm('blogs.add_category')):
+        return HttpResponse("You are not authorized to category posts.")
     if request.method == 'POST':
         form = CategoryForm(request.POST)
         if form.is_valid():
@@ -60,6 +65,8 @@ def edit_category(request,id):
     return render(request,'dashboard/edit_category.html',context)
 
 def delete_category(request,id):
+    if not (request.user.is_staff or request.user.has_perm('blogs.delete_category')):
+        return HttpResponse("You are not authorized to delete categories.")
     category = get_object_or_404(Category,id=id)
     category.delete()
     return redirect('categories')
@@ -73,7 +80,10 @@ def posts(request):
     }
     return render(request,'dashboard/posts.html',context)
 
+@login_required(login_url='login')
 def add_post(request):
+    if not (request.user.is_staff or request.user.has_perm('blogs.add_blog')):
+        return HttpResponse("You are not authorized to add posts.")
     if request.method == 'POST':
         form = BlogPostForm(request.POST,request.FILES)
         if form.is_valid():
@@ -94,6 +104,8 @@ def add_post(request):
     return render(request,'dashboard/add_post.html',context)
 
 def edit_post(request,id):
+    if not (request.user.is_staff or request.user.has_perm('blogs.change_blog')):
+        return HttpResponse("You are not authorized to edit posts.")
     post = get_object_or_404(Blog,id=id)
     
     if request.method == 'POST':
@@ -112,10 +124,13 @@ def edit_post(request,id):
     return render(request,'dashboard/edit_post.html',context)
 
 def delete_post(request,id):
+    if not (request.user.is_staff or request.user.has_perm('blogs.delete_blog')):
+        return HttpResponse("You are not authorized to delete posts.")
     post = get_object_or_404(Blog,id=id)
     post.delete()
     return redirect('posts')
 
+@login_required(login_url='login')
 def users(request):
 
     users = User.objects.all()
@@ -126,6 +141,8 @@ def users(request):
     return render(request,'dashboard/users.html',context)
 
 def add_user(request):
+    if not (request.user.is_staff or request.user.has_perm('auth.add_user')):
+        return HttpResponse("You are not authorized to add users.")
     form = UserForm()
     if request.method == 'POST':
         form = UserForm(request.POST)
@@ -138,6 +155,8 @@ def add_user(request):
     return render(request,'dashboard/add_user.html',context)
 
 def edit_user(request,id):
+    if not (request.user.is_staff or request.user.has_perm('auth.change_user')):
+        return HttpResponse("You are not authorized to edit users.")
     user = get_object_or_404(User,id=id)
     if request.method == 'POST':
         form = EditUserForm(request.POST,instance=user)
@@ -152,6 +171,14 @@ def edit_user(request,id):
     return render(request,'dashboard/edit_user.html',context)
 
 def delete_user(request,id):
+    if not (request.user.is_staff or request.user.has_perm('auth.delete_user')):
+        return HttpResponse("You are not authorized to delete users.")
     user = get_object_or_404(User,id=id)
     user.delete()
     return redirect('users')
+
+def user_logout(request):
+    if request.method == 'POST':
+        auth.logout(request)
+        return redirect('login')
+    return render(request,'dashboard/logout.html')

@@ -22,4 +22,7 @@ urlpatterns = [
     path('users/edit/<int:id>/',views.edit_user,name='edit_user'),
     path('users/delete/<int:id>/',views.delete_user,name='delete_user'),
 
+    #log out path
+    path('logout/',views.user_logout,name='user_logout'),
+
 ]

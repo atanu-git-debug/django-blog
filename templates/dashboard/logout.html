@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<!-- Dashboard Content -->
+ <div class="row">
+    <!--load the sidebar-->
+    {% include 'dashboard/sidebar.html' %}
+    
+
+    <!--right sidebar-->
+    <div class="col-md-9">
+        <h3>You are logged in as <b>{{ user.username }}</b></h3>
+        <p>Are you sure you want to <a href="{% url 'logout' %}" class="btn btn-warning" ><b class="text-danger">logout?</b></a></p>
+    </div>
+ </div>
+
+{% endblock %}
