@@ -1,9 +1,12 @@
+from pyexpat.errors import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse
 from blog_main.views import logout
 from blogs.models import Blog, Category
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
+
+from utils import toast
 from .forms import BlogPostForm, CategoryForm, UserForm,EditUserForm
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
@@ -180,5 +183,6 @@ def delete_user(request,id):
 def user_logout(request):
     if request.method == 'POST':
         auth.logout(request)
-        return redirect('login')
+        toast(request, "You have been logged out successfully.", level='success')
+        return redirect('home')
     return render(request,'dashboard/logout.html')

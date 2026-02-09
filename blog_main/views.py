@@ -7,6 +7,7 @@ from follow_us.models import FollowUs
 from .forms import RegistrationForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import auth
+from utils.toast import toast
 
 def home(request):
     
@@ -54,6 +55,7 @@ def login(request):
             user = auth.authenticate(username=username,password=password)
             if user is not None:
                 auth.login(request,user)
+                #toast(request, "You have been logged in successfully.", level='success')
             return redirect('dashboard')
     form = AuthenticationForm()
     context={
@@ -63,4 +65,5 @@ def login(request):
 
 def logout(request):
     auth.logout(request)
+    #toast(request, "You have been logged out successfully.", level='success')
     return redirect('home')
